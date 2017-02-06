@@ -1,0 +1,24 @@
+@(taskForm: Form[TaskData])(implicit messages: Messages)
+
+@import helper._
+@import controllers.TaskDAO
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <link rel="stylesheet" media="screen" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+</head>
+<body class="container">
+    @form(action = routes.Application.createTask){
+    <fieldset>
+        <legend>Create a task</legend>
+        @inputText(taskForm("id"), '_label -> "Name", 'placeholder -> "007")
+        @inputText(taskForm("dueDate"), '_label -> "Due date", 'placeholder -> "Today")
+        @textarea(taskForm("description"), '_label -> "Description", 'placeholder -> "Enter a description")
+        <input type="submit" class="btn btn-success" value="Save">
+    </fieldset>
+    }
+</body>
+</html>
