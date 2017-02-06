@@ -2,11 +2,15 @@ package controllers
 
 import javax.inject.Inject
 
-import models.TaskData
+import models.{Task, TaskData}
 import play.api.data.Forms._
 import play.api.data._
+import play.api.libs.json.Json
 import play.api.mvc.Controller
+import play.modules.reactivemongo.json._
 import play.modules.reactivemongo.{MongoController, ReactiveMongoApi, ReactiveMongoComponents}
+import reactivemongo.api.ReadPreference
+import reactivemongo.api.commands.WriteResult
 import reactivemongo.play.json.collection.JSONCollection
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -17,7 +21,13 @@ import scala.concurrent.{ExecutionContext, Future}
 class TaskDAO @Inject()(val reactiveMongoApi: ReactiveMongoApi)(implicit ec: ExecutionContext) extends Controller
     with MongoController with ReactiveMongoComponents {
 
+  def create(taskData: TaskData): Future[WriteResult] = {
+    tasksFuture.flatMap(_.insert(Task(taskData.id, taskData.date, taskData.description)))
+  }
 
+  def getAllTasks: Future[List[Task]] = {
+    tasksFuture.flatMap(_.find(Json.obj()).cursor[Task](ReadPreference.primaryPreferred).collect[List]())
+  }
 
   def tasksFuture: Future[JSONCollection] = database.map(_.collection[JSONCollection]("tasks"))
 }
@@ -26,7 +36,7 @@ class TaskDAO @Inject()(val reactiveMongoApi: ReactiveMongoApi)(implicit ec: Exe
 object TaskDAO {
   val createTaskForm = Form(
     mapping(
-      "id" -> optional(number),
+      "id" -> number,
       "dueDate" -> date,
       "description" -> nonEmptyText
     )(TaskData.apply)(TaskData.unapply)

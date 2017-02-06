@@ -7,9 +7,9 @@ import play.api.libs.json.Json
 /**
   * Created by Muhsin Ali on 06/02/2017.
   */
-case class Task(dueDate: Date, description: String)
+case class Task(id: Int, dueDate: Date, description: String)
 
-case class TaskData(id: Option[Int], date: Date, description: String)
+case class TaskData(id: Int, date: Date, description: String)
 
 
 

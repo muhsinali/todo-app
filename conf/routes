@@ -4,8 +4,8 @@
 
 # An example controller showing a sample home page
 GET     /                           controllers.Application.index
-
 POST    /add                        controllers.Application.createTask
+GET     /show                       controllers.Application.showTasks
 
 
 # Map static resources from the /public folder to the /assets URL path
