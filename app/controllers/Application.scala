@@ -24,13 +24,14 @@ class Application @Inject()(val reactiveMongoApi: ReactiveMongoApi, val messages
 
   def showTasks() = Action.async {implicit request => taskDAO.getAllTasks.map(tasks => Ok(Json.toJson(tasks)))}
 
-
   def createTask() = Action.async {implicit request =>
-    def failure(formWithErrors: Form[TaskData]) = Future(BadRequest(formWithErrors.errorsAsJson))
+    def failure(formWithErrors: Form[TaskData]) = {
+      Future(BadRequest(formWithErrors.errorsAsJson).flashing("error" -> "Could not create task"))
+    }
     
     def success(taskData: TaskData) = {
       taskDAO.create(taskData)
-      Future(Ok("Created task"))
+      Future(Redirect(routes.Application.index()).flashing("success" -> "Created task"))
     }
 
     val form = TaskDAO.createTaskForm.bindFromRequest()
