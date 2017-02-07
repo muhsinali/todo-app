@@ -24,6 +24,8 @@ class Application @Inject()(val reactiveMongoApi: ReactiveMongoApi, val messages
 
   def showTasks() = Action.async {implicit request => taskDAO.getAllTasks.map(tasks => Ok(Json.toJson(tasks)))}
 
+  def fileNotFound() = Action.async {implicit request => Future(NotFound(views.html.notFoundPage()))}
+
   def createTask() = Action.async {implicit request =>
     def failure(formWithErrors: Form[TaskData]) = {
       Future(BadRequest(formWithErrors.errorsAsJson).flashing("error" -> "Could not create task"))
