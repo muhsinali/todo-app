@@ -3,7 +3,7 @@ package controllers
 import javax.inject.Inject
 
 import models.{Task, TaskData}
-import play.api.data.Forms._
+
 import play.api.data._
 import play.api.libs.json.Json
 import play.api.mvc.Controller
@@ -21,8 +21,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class TaskDAO @Inject()(val reactiveMongoApi: ReactiveMongoApi)(implicit ec: ExecutionContext) extends Controller
     with MongoController with ReactiveMongoComponents {
 
-  def create(taskData: TaskData): Future[WriteResult] = {
-    tasksFuture.flatMap(_.insert(Task(taskData.id, taskData.date, taskData.description)))
+  def create(t: TaskData): Future[WriteResult] = {
+    tasksFuture.flatMap(_.insert(Task(t.date, t.description)))
   }
 
   def getAllTasks: Future[List[Task]] = {
@@ -34,11 +34,14 @@ class TaskDAO @Inject()(val reactiveMongoApi: ReactiveMongoApi)(implicit ec: Exe
 
 
 object TaskDAO {
-  val createTaskForm = Form(
-    mapping(
-      "id" -> number,
-      "dueDate" -> date,
-      "description" -> nonEmptyText
-    )(TaskData.apply)(TaskData.unapply)
-  )
+  val createTaskForm = {
+    import play.api.data.Forms._
+    Form(
+      mapping(
+        "dueDate" -> date,
+        "description" -> nonEmptyText
+      )(TaskData.apply)(TaskData.unapply)
+    )
+  }
+
 }
