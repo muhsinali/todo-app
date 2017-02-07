@@ -1,4 +1,4 @@
-@(taskForm: Form[TaskData])(implicit messages: Messages)
+@(taskForm: Form[TaskData])(implicit messages: Messages, flash: Flash)
 
 @import helper._
 @import controllers.TaskDAO
@@ -11,11 +11,23 @@
     <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
 </head>
 <body class="container">
+    @if(flash.get("success").isDefined){
+        <div class="alert alert-success">
+            @flash.get("success")
+        </div>
+    }
+
+    @if(flash.get("error").isDefined){
+        <div class="alert alert-danger">
+            @flash.get("error")
+        </div>
+    }
+
     @form(action = routes.Application.createTask){
     <fieldset>
         <legend>Create a task</legend>
         @inputText(taskForm("id"), '_label -> "ID", 'placeholder -> "007")
-        @inputText(taskForm("dueDate"), '_label -> "Due date", 'placeholder -> "Today")
+        @inputText(taskForm("dueDate"), '_label -> "Due date", 'placeholder -> "1971-06-28")
         @textarea(taskForm("description"), '_label -> "Description", 'placeholder -> "Enter a description")
         <input type="submit" class="btn btn-success" value="Save">
     </fieldset>
