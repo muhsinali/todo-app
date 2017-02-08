@@ -8,7 +8,7 @@ import play.api.mvc.{RequestHeader, Result}
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
-  * Used to provide custom implementations for handling client errors.
+  * Handles client and server errors that occur when the web app is running
   */
 @Singleton
 class ErrorHandler @Inject()(implicit ec: ExecutionContext) extends HttpErrorHandler {
