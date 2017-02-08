@@ -11,6 +11,7 @@ import play.modules.reactivemongo.json._
 import play.modules.reactivemongo.{MongoController, ReactiveMongoApi, ReactiveMongoComponents}
 import reactivemongo.api.ReadPreference
 import reactivemongo.api.commands.WriteResult
+import reactivemongo.api.Cursor
 import reactivemongo.play.json.collection.JSONCollection
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -26,7 +27,9 @@ class TaskDAO @Inject()(val reactiveMongoApi: ReactiveMongoApi)(implicit ec: Exe
   }
 
   def getAllTasks: Future[List[Task]] = {
-    tasksFuture.flatMap(_.find(Json.obj()).cursor[Task](ReadPreference.primaryPreferred).collect[List]())
+    tasksFuture.flatMap(_.find(Json.obj()).cursor[Task](ReadPreference.primaryPreferred)
+        .collect[List](Int.MaxValue, Cursor.FailOnError[List[Task]]())
+    )
   }
 
   def tasksFuture: Future[JSONCollection] = database.map(_.collection[JSONCollection]("tasks"))
