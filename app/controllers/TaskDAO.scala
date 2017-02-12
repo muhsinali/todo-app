@@ -1,9 +1,10 @@
 package controllers
 
+import java.text.SimpleDateFormat
+import java.util.{Calendar, Date}
 import javax.inject.Inject
 
 import models.{Task, TaskData}
-
 import play.api.data._
 import play.api.libs.json.Json
 import play.api.mvc.Controller
@@ -23,7 +24,8 @@ class TaskDAO @Inject()(val reactiveMongoApi: ReactiveMongoApi)(implicit ec: Exe
     with MongoController with ReactiveMongoComponents {
 
   def create(t: TaskData): Future[WriteResult] = {
-    tasksFuture.flatMap(_.insert(Task(t.date, t.description)))
+    val sdf = new SimpleDateFormat("dd-MM-yyyy")
+    tasksFuture.flatMap(_.insert(Task(sdf.format(new Date()), sdf.format(t.date), t.description)))
   }
 
   def getAllTasks: Future[List[Task]] = {
