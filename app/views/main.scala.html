@@ -23,10 +23,11 @@
         </div>
     }
 
+    <h1>Todo app:</h1>
+
     @form(action = routes.Application.createTask){
     <fieldset>
         <legend>Create a task</legend>
-        @inputText(taskForm("id"), '_label -> "ID", 'placeholder -> "007")
         @inputText(taskForm("dueDate"), '_label -> "Due date", 'placeholder -> "1971-06-28")
         @textarea(taskForm("description"), '_label -> "Description", 'placeholder -> "Enter a description")
         <input type="submit" class="btn btn-success" value="Save">
