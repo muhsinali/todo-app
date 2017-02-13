@@ -1,6 +1,6 @@
 import org.scalatestplus.play._
-import play.api.test._
 import play.api.test.Helpers._
+import play.api.test._
 
 /**
  * Add your spec here.
@@ -9,34 +9,34 @@ import play.api.test.Helpers._
  */
 class ApplicationSpec extends PlaySpec with OneAppPerTest {
 
-  "Routes" should {
-
-    "send 404 on a bad request" in  {
-      route(app, FakeRequest(GET, "/boum")).map(status(_)) mustBe Some(NOT_FOUND)
+  "Application" should {
+    "render index view" in {
+      val result = route(app, FakeRequest(GET, "/")).get
+      status(result) mustBe OK
+      contentAsString(result) must include ("Todo app:")
     }
+
+    "render not found view" in {
+      val result = route(app, FakeRequest(GET, "/fake-url")).get
+      status(result) mustBe SEE_OTHER
+      val resultHeaders = headers(result)
+      resultHeaders("Location") mustBe "/not-found"
+    }
+
+//    // TODO create a task
+//    "add a mock task" in {
+////      val taskData: Map[String, String] = Map(
+////        "dueDate" -> "01-01-2000",
+////        "description" -> "First day of the year 2000"
+////      )
+//      val result = route(app, FakeRequest(POST, "/add").withFormUrlEncodedBody(
+//        ("dueDate", "01-01-2050"),
+//        ("description", "First day of the year 2050")
+//      )).get
+//      status(result) mustBe OK
+//    }
 
   }
 
-  "HomeController" should {
-
-    "render the index page" in {
-      val home = route(app, FakeRequest(GET, "/")).get
-
-      status(home) mustBe OK
-      contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("Your new application is ready.")
-    }
-
-  }
-
-  "CountController" should {
-
-    "return an increasing count" in {
-      contentAsString(route(app, FakeRequest(GET, "/count")).get) mustBe "0"
-      contentAsString(route(app, FakeRequest(GET, "/count")).get) mustBe "1"
-      contentAsString(route(app, FakeRequest(GET, "/count")).get) mustBe "2"
-    }
-
-  }
 
 }
