@@ -30,8 +30,8 @@
       @form(action = routes.Application.createTask){
         <fieldset>
           <legend>Create a task</legend>
-          @inputText(taskForm("title"), '_label -> "Title", 'placeholder -> "Birthday")
-          @inputText(taskForm("dueDate"), '_label -> "Due date", 'placeholder -> "1971-06-28")
+          @inputText(taskForm("title"), '_label -> "Title", 'placeholder -> "Christmas day")
+          @inputText(taskForm("dueDate"), '_label -> "Due", 'placeholder -> "2050-12-01")
           @textarea(taskForm("description"), '_label -> "Description", 'placeholder -> "Enter a description")
           <input type="submit" class="btn btn-success" value="Save">
         </fieldset>
