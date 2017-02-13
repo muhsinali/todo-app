@@ -5,9 +5,10 @@ import javax.inject.Inject
 import models.TaskData
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
 import play.modules.reactivemongo.{MongoController, ReactiveMongoApi, ReactiveMongoComponents}
+
+import scala.concurrent.Future
 
 /**
   * Created by Muhsin Ali on 06/02/2017.
@@ -22,18 +23,16 @@ class Application @Inject()(val reactiveMongoApi: ReactiveMongoApi, val messages
     taskDAO.getAllTasks.map(tasks => Ok(views.html.main(tasks, TaskDAO.createTaskForm)))
   }
 
-  def showTasks() = Action.async {implicit request => taskDAO.getAllTasks.map(tasks => Ok(Json.toJson(tasks)))}
-
   def fileNotFound() = Action {implicit request => NotFound(views.html.notFoundPage())}
 
-  def createTask() = Action {implicit request =>
+  def createTask() = Action.async {implicit request =>
     def failure(formWithErrors: Form[TaskData]) = {
-      BadRequest(formWithErrors.errorsAsJson)
+      taskDAO.getAllTasks.map(tasks => BadRequest(views.html.main(tasks, formWithErrors)))
     }
     
     def success(taskData: TaskData) = {
       taskDAO.create(taskData)
-      Redirect(routes.Application.index()).flashing("success" -> "Created task")
+      Future(Redirect(routes.Application.index()).flashing("success" -> "Created task"))
     }
 
     val form = TaskDAO.createTaskForm.bindFromRequest()
