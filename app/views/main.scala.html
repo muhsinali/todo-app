@@ -6,55 +6,59 @@
 <!DOCTYPE html>
 
 <html lang="en">
-<head>
+  <head>
     <link rel="stylesheet" media="screen" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
-</head>
-<body class="container">
+  </head>
+
+  <body class="container">
     @if(flash.get("success").isDefined){
-        <div class="alert alert-success">
-            @flash.get("success")
-        </div>
+      <div class="alert alert-success">
+        @flash.get("success")
+      </div>
     }
 
     @if(flash.get("error").isDefined){
-        <div class="alert alert-danger">
-            @flash.get("error")
-        </div>
+      <div class="alert alert-danger">
+        @flash.get("error")
+      </div>
     }
 
     <h1>Todo app:</h1>
-    <div class="pull-left">
-        @form(action = routes.Application.createTask){
-            <fieldset>
-                <legend>Create a task</legend>
-                @inputText(taskForm("title"), '_label -> "Title", 'placeholder -> "Birthday")
-                @inputText(taskForm("dueDate"), '_label -> "Due date", 'placeholder -> "1971-06-28")
-                @textarea(taskForm("description"), '_label -> "Description", 'placeholder -> "Enter a description")
-                <input type="submit" class="btn btn-success" value="Save">
-            </fieldset>
-        }
-    </div>
-    <div class="pull-right">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Due</th>
-                    <th>Title</th>
-                    <th>Description</th>
-                </tr>
 
-            </thead>
-            <tbody>
-                @for(currentTask <- tasks){
-                    <tr>
-                        <td>@currentTask.dueDate</td>
-                        <td>@currentTask.title</td>
-                        <td>@currentTask.description</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+    <div class="pull-left">
+      @form(action = routes.Application.createTask){
+        <fieldset>
+          <legend>Create a task</legend>
+          @inputText(taskForm("title"), '_label -> "Title", 'placeholder -> "Birthday")
+          @inputText(taskForm("dueDate"), '_label -> "Due date", 'placeholder -> "1971-06-28")
+          @textarea(taskForm("description"), '_label -> "Description", 'placeholder -> "Enter a description")
+          <input type="submit" class="btn btn-success" value="Save">
+        </fieldset>
+      }
     </div>
-</body>
+
+    <div class="pull-right">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Due</th>
+            <th>Title</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for(currentTask <- tasks){
+            <tr>
+              <td>@currentTask.dueDate</td>
+              <td>@currentTask.title</td>
+              <td>@currentTask.description</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </body>
+
 </html>
