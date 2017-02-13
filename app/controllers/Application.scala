@@ -18,7 +18,9 @@ class Application @Inject()(val reactiveMongoApi: ReactiveMongoApi, val messages
   import scala.concurrent.ExecutionContext.Implicits.global
   val taskDAO = new TaskDAO(reactiveMongoApi)
 
-  def index() = Action {implicit request => Ok(views.html.main(TaskDAO.createTaskForm))}
+  def index() = Action.async {implicit request =>
+    taskDAO.getAllTasks.map(tasks => Ok(views.html.main(tasks, TaskDAO.createTaskForm)))
+  }
 
   def showTasks() = Action.async {implicit request => taskDAO.getAllTasks.map(tasks => Ok(Json.toJson(tasks)))}
 

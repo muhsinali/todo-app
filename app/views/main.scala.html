@@ -1,4 +1,4 @@
-@(taskForm: Form[TaskData])(implicit messages: Messages, flash: Flash)
+@(tasks: List[Task], taskForm: Form[TaskData])(implicit messages: Messages, flash: Flash)
 
 @import helper._
 @import controllers.TaskDAO
@@ -24,14 +24,37 @@
     }
 
     <h1>Todo app:</h1>
+    <div class="pull-left">
+        @form(action = routes.Application.createTask){
+            <fieldset>
+                <legend>Create a task</legend>
+                @inputText(taskForm("title"), '_label -> "Title", 'placeholder -> "Birthday")
+                @inputText(taskForm("dueDate"), '_label -> "Due date", 'placeholder -> "1971-06-28")
+                @textarea(taskForm("description"), '_label -> "Description", 'placeholder -> "Enter a description")
+                <input type="submit" class="btn btn-success" value="Save">
+            </fieldset>
+        }
+    </div>
+    <div class="pull-right">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Due</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                </tr>
 
-    @form(action = routes.Application.createTask){
-    <fieldset>
-        <legend>Create a task</legend>
-        @inputText(taskForm("dueDate"), '_label -> "Due date", 'placeholder -> "1971-06-28")
-        @textarea(taskForm("description"), '_label -> "Description", 'placeholder -> "Enter a description")
-        <input type="submit" class="btn btn-success" value="Save">
-    </fieldset>
-    }
+            </thead>
+            <tbody>
+                @for(currentTask <- tasks){
+                    <tr>
+                        <td>@currentTask.dueDate</td>
+                        <td>@currentTask.title</td>
+                        <td>@currentTask.description</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
