@@ -1,7 +1,7 @@
 package controllers
 
 import java.text.SimpleDateFormat
-import java.util.{Calendar, Date}
+import java.util.Date
 import javax.inject.Inject
 
 import models.{Task, TaskData}
@@ -10,9 +10,8 @@ import play.api.libs.json.Json
 import play.api.mvc.Controller
 import play.modules.reactivemongo.json._
 import play.modules.reactivemongo.{MongoController, ReactiveMongoApi, ReactiveMongoComponents}
-import reactivemongo.api.ReadPreference
+import reactivemongo.api.{Cursor, ReadPreference}
 import reactivemongo.api.commands.WriteResult
-import reactivemongo.api.Cursor
 import reactivemongo.play.json.collection.JSONCollection
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -25,7 +24,7 @@ class TaskDAO @Inject()(val reactiveMongoApi: ReactiveMongoApi)(implicit ec: Exe
 
   def create(t: TaskData): Future[WriteResult] = {
     val sdf = new SimpleDateFormat("dd-MM-yyyy")
-    tasksFuture.flatMap(_.insert(Task(sdf.format(new Date()), sdf.format(t.date), t.description)))
+    tasksFuture.flatMap(_.insert(Task(t.title, t.description, sdf.format(new Date()), sdf.format(t.date))))
   }
 
   def getAllTasks: Future[List[Task]] = {
@@ -43,8 +42,9 @@ object TaskDAO {
     import play.api.data.Forms._
     Form(
       mapping(
-        "dueDate" -> date,
-        "description" -> nonEmptyText
+        "title" -> nonEmptyText,
+        "description" -> nonEmptyText,
+        "dueDate" -> date
       )(TaskData.apply)(TaskData.unapply)
     )
   }
