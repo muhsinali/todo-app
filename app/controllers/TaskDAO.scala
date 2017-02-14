@@ -21,10 +21,15 @@ import scala.concurrent.{ExecutionContext, Future}
   */
 class TaskDAO @Inject()(val reactiveMongoApi: ReactiveMongoApi)(implicit ec: ExecutionContext) extends Controller
     with MongoController with ReactiveMongoComponents {
+  val sdf = new SimpleDateFormat("dd-MM-yyyy")
 
   def create(t: TaskData): Future[WriteResult] = {
-    val sdf = new SimpleDateFormat("dd-MM-yyyy")
     tasksFuture.flatMap(_.insert(Task(t.title, t.description, sdf.format(new Date()), sdf.format(t.date))))
+  }
+
+  // Used to populate database with tasks at startup
+  def create(title: String, description: String, dueDate: Date): Future[WriteResult] = {
+    tasksFuture.flatMap(_.insert(Task(title, description, sdf.format(new Date()), sdf.format(dueDate))))
   }
 
   def getAllTasks: Future[List[Task]] = {
