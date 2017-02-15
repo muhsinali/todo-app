@@ -3,10 +3,8 @@ package controllers
 import javax.inject.Inject
 
 import models.TaskData
-import play.Environment
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.inject.ApplicationLifecycle
 import play.api.mvc.{Action, Controller}
 import play.modules.reactivemongo.{MongoController, ReactiveMongoApi, ReactiveMongoComponents}
 

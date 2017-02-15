@@ -22,8 +22,8 @@ import scala.io.Source
 @Singleton
 class ApplicationInterceptor @Inject() (reactiveMongoApi: ReactiveMongoApi, env: Environment,
                                         lifecycle: ApplicationLifecycle)(implicit ec: ExecutionContext){
-  val taskDAO = new TaskDAO(reactiveMongoApi)
 
+  val taskDAO = new TaskDAO(reactiveMongoApi)
   onStartup()
   if(!env.isProd) lifecycle.addStopHook(() => onShutdown())
 
