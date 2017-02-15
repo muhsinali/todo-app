@@ -16,3 +16,8 @@ case class TaskData(title: String, description: String, dueDate: Date)
 object Task {
   implicit val formatter = Json.format[Task]
 }
+
+object TaskData {
+  // Used in ApplicationInterceptor
+  implicit val formatter = Json.format[TaskData]
+}
