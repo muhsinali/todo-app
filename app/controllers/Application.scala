@@ -14,17 +14,16 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, Controller}
 import play.modules.reactivemongo.{MongoController, ReactiveMongoApi, ReactiveMongoComponents}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.io.Source
 
 /**
   * Created by Muhsin Ali on 06/02/2017.
   */
 class Application @Inject()(val reactiveMongoApi: ReactiveMongoApi, val messagesApi: MessagesApi, val environment: Environment,
-                            lifecycle: ApplicationLifecycle)
+                            lifecycle: ApplicationLifecycle)(implicit ec: ExecutionContext)
     extends Controller with MongoController with ReactiveMongoComponents with I18nSupport {
 
-  import scala.concurrent.ExecutionContext.Implicits.global
   val taskDAO = new TaskDAO(reactiveMongoApi)
 
   onStartup()
