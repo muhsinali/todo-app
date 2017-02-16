@@ -8,15 +8,15 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, Controller}
 import play.modules.reactivemongo.{MongoController, ReactiveMongoApi, ReactiveMongoComponents}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 /**
   * Created by Muhsin Ali on 06/02/2017.
   */
-class Application @Inject()(val reactiveMongoApi: ReactiveMongoApi, val messagesApi: MessagesApi) extends Controller with MongoController
+class Application @Inject()(val reactiveMongoApi: ReactiveMongoApi, val messagesApi: MessagesApi)
+                           (implicit ec: ExecutionContext) extends Controller with MongoController
     with ReactiveMongoComponents with I18nSupport {
 
-  import scala.concurrent.ExecutionContext.Implicits.global
   val taskDAO = new TaskDAO(reactiveMongoApi)
 
   def index() = Action.async {implicit request =>
@@ -29,14 +29,11 @@ class Application @Inject()(val reactiveMongoApi: ReactiveMongoApi, val messages
     def failure(formWithErrors: Form[TaskData]) = {
       taskDAO.getAllTasks.map(tasks => BadRequest(views.html.main(tasks, formWithErrors)))
     }
-    
     def success(taskData: TaskData) = {
       taskDAO.create(taskData)
       Future(Redirect(routes.Application.index()).flashing("success" -> "Created task"))
     }
-
-    val form = TaskDAO.createTaskForm.bindFromRequest()
-    form.fold(failure, success)
+    TaskDAO.createTaskForm.bindFromRequest().fold(failure, success)
   }
 
 
