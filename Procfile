@@ -1,1 +1,1 @@
-web: target/universal/stage/bin/muhsinali-todo-app -Dhttp.port=${PORT} -Dmongodb.uri=${DATABASE_URL}
+web: target/universal/stage/bin/todoapp -Dhttp.port=${PORT} -Dmongodb.uri=${DATABASE_URL}
