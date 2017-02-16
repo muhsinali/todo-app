@@ -3,3 +3,9 @@ scala:
     - 2.11.8
 jdk:
     - oraclejdk8
+services:
+  - mongodb
+
+# MongoDB doesn't always accept connections immediately, so wait 15s before making the first connection
+before_script:
+  - sleep 15
