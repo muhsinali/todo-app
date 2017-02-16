@@ -30,17 +30,15 @@ class ApplicationInterceptor @Inject() (reactiveMongoApi: ReactiveMongoApi, env:
 
   def onStartup(): Unit = {
     Logger.info("Populating database with tasks on startup")
-    val file = new File("public/exampleTask.json")
+    val file = new File("public/exampleTasks.json")
     assert(file.exists() && file.isFile && file.canRead)
 
     val source = Source.fromFile(file)
-    val taskData = Json.parse(source.mkString).as[TaskData]
-    source.close()
-
-    taskDAO.create(taskData).onFailure{
-      case throwable => Logger.error("Failed to create task object", throwable)
+    val taskDataList = (Json.parse(source.mkString) \ "tasks").as[List[TaskData]]
+    taskDataList.foreach{ taskData =>
+      taskDAO.create(taskData).onFailure{case t => Logger.error("Failed to create task object", t)}
     }
-
+    source.close()
   }
 
   def onShutdown(): Future[Boolean] = {
