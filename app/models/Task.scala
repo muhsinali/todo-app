@@ -9,10 +9,15 @@ import play.api.libs.json.Json
   */
 case class Task(title: String, description: String, dateCreated: String, dueDate: String)
 
-case class TaskData(title: String, description: String, date: Date)
+case class TaskData(title: String, description: String, dueDate: Date)
 
 
 
 object Task {
   implicit val formatter = Json.format[Task]
+}
+
+object TaskData {
+  // Used in ApplicationInterceptor.onStartup() to populate database with Tasks on startup
+  implicit val formatter = Json.format[TaskData]
 }
