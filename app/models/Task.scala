@@ -18,6 +18,6 @@ object Task {
 }
 
 object TaskData {
-  // Used in ApplicationInterceptor
+  // Used in ApplicationInterceptor.onStartup() to populate database with Tasks on startup
   implicit val formatter = Json.format[TaskData]
 }
