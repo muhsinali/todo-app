@@ -25,7 +25,7 @@ class ApplicationInterceptor @Inject() (reactiveMongoApi: ReactiveMongoApi, env:
 
   val taskDAO = new TaskDAO(reactiveMongoApi)
   onStartup()
-  if(!env.isProd) lifecycle.addStopHook(() => onShutdown())
+  lifecycle.addStopHook(() => onShutdown())
 
 
   def onStartup(): Unit = {
