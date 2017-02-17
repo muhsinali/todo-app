@@ -8,5 +8,6 @@
       "description": "A secret key to sign cookies with",
       "generator": "secret"
     }
-  }
+  },
+  "addons": ["mongolab"]
 }
