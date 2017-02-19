@@ -16,8 +16,6 @@ import scala.io.Source
 
 /**
   * Responsible for setting up/tearing down the application.
-  *
-  * Note: The database is only cleared if the application is running in dev/test mode.
   */
 @Singleton
 class ApplicationInterceptor @Inject() (reactiveMongoApi: ReactiveMongoApi, env: Environment,
