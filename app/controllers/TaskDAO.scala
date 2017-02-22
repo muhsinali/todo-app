@@ -24,12 +24,12 @@ class TaskDAO @Inject()(val reactiveMongoApi: ReactiveMongoApi)(implicit ec: Exe
   val sdf = new SimpleDateFormat("dd-MM-yyyy")
 
   def create(t: TaskData): Future[WriteResult] = {
-    tasksFuture.flatMap(_.insert(Task(t.title, t.description, sdf.format(new Date()), sdf.format(t.dueDate))))
+    tasksFuture.flatMap(_.insert(Task(TaskDAO.generateID, t.title, t.description, sdf.format(new Date()), sdf.format(t.dueDate))))
   }
 
   // Used to populate database with tasks at startup
   def create(title: String, description: String, dueDate: Date): Future[WriteResult] = {
-    tasksFuture.flatMap(_.insert(Task(title, description, sdf.format(new Date()), sdf.format(dueDate))))
+    tasksFuture.flatMap(_.insert(Task(TaskDAO.generateID, title, description, sdf.format(new Date()), sdf.format(dueDate))))
   }
 
   def drop(): Future[Boolean] = tasksFuture.flatMap(_.drop(failIfNotFound = true))
@@ -49,11 +49,18 @@ object TaskDAO {
     import play.api.data.Forms._
     Form(
       mapping(
+        "id" -> optional(number),
         "title" -> nonEmptyText,
         "description" -> nonEmptyText,
         "dueDate" -> date
       )(TaskData.apply)(TaskData.unapply)
     )
+  }
+
+  private var numTasksCreated = 0
+  def generateID: Int = {
+    numTasksCreated += 1
+    numTasksCreated
   }
 
 }
