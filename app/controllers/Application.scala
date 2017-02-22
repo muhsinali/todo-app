@@ -36,5 +36,13 @@ class Application @Inject()(val reactiveMongoApi: ReactiveMongoApi, val messages
     TaskDAO.createTaskForm.bindFromRequest().fold(failure, success)
   }
 
+  // TODO get the flash scope to show up
+  def deleteTask(id: Int) = Action.async {implicit request =>
+    taskDAO.remove(id).map { writeResult =>
+      val flashMessage = if (writeResult.ok) "success" -> s"Deleted task with id $id" else "error" -> s"Could not delete task with id $id"
+      Redirect(routes.Application.index()).flashing(flashMessage)
+    }
+  }
+
 
 }
