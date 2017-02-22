@@ -6,7 +6,9 @@
 GET     /                           controllers.Application.index
 POST    /add                        controllers.Application.createTask
 
-GET     /not-found             controllers.Application.fileNotFound
+GET     /not-found                  controllers.Application.fileNotFound
+
+DELETE  /delete/:id                 controllers.Application.deleteTask(id: Int)
 
 
 # Map static resources from the /public folder to the /assets URL path
