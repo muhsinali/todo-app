@@ -21,26 +21,28 @@ import scala.concurrent.{ExecutionContext, Future}
   */
 class TaskDAO @Inject()(val reactiveMongoApi: ReactiveMongoApi)(implicit ec: ExecutionContext) extends Controller
     with MongoController with ReactiveMongoComponents {
-  val sdf = new SimpleDateFormat("dd-MM-yyyy")
+  private val sdf = new SimpleDateFormat("dd-MM-yyyy")
+  private def tasksCollection: Future[JSONCollection] = database.map(_.collection[JSONCollection]("tasks"))
 
   def create(t: TaskData): Future[WriteResult] = {
-    tasksFuture.flatMap(_.insert(Task(TaskDAO.generateID, t.title, t.description, sdf.format(new Date()), sdf.format(t.dueDate))))
+    tasksCollection.flatMap(_.insert(Task(TaskDAO.generateID, t.title, t.description, sdf.format(new Date()), sdf.format(t.dueDate))))
   }
 
   // Used to populate database with tasks at startup
   def create(title: String, description: String, dueDate: Date): Future[WriteResult] = {
-    tasksFuture.flatMap(_.insert(Task(TaskDAO.generateID, title, description, sdf.format(new Date()), sdf.format(dueDate))))
+    tasksCollection.flatMap(_.insert(Task(TaskDAO.generateID, title, description, sdf.format(new Date()), sdf.format(dueDate))))
   }
 
-  def drop(): Future[Boolean] = tasksFuture.flatMap(_.drop(failIfNotFound = true))
+  def drop(): Future[Boolean] = tasksCollection.flatMap(_.drop(failIfNotFound = true))
 
   def getAllTasks: Future[List[Task]] = {
-    tasksFuture.flatMap(_.find(Json.obj()).cursor[Task](ReadPreference.primaryPreferred)
+    tasksCollection.flatMap(_.find(Json.obj()).cursor[Task](ReadPreference.primaryPreferred)
         .collect[List](Int.MaxValue, Cursor.FailOnError[List[Task]]())
     )
   }
 
-  def tasksFuture: Future[JSONCollection] = database.map(_.collection[JSONCollection]("tasks"))
+  def remove(id: Int): Future[WriteResult] = tasksCollection.flatMap(_.remove(Json.obj("id" -> id)))
+
 }
 
 
