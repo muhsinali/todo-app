@@ -19,12 +19,6 @@ class Application @Inject()(val reactiveMongoApi: ReactiveMongoApi, val messages
 
   val taskDAO = new TaskDAO(reactiveMongoApi)
 
-  def index() = Action.async {implicit request =>
-    taskDAO.getAllTasks.map(tasks => Ok(views.html.main(tasks, TaskDAO.createTaskForm)))
-  }
-
-  def fileNotFound() = Action {implicit request => NotFound(views.html.notFoundPage())}
-
   def createTask() = Action.async {implicit request =>
     def failure(formWithErrors: Form[TaskData]) = {
       taskDAO.getAllTasks.map(tasks => BadRequest(views.html.main(tasks, formWithErrors)))
@@ -42,6 +36,14 @@ class Application @Inject()(val reactiveMongoApi: ReactiveMongoApi, val messages
       val flashMessage = if (writeResult.ok) "success" -> s"Deleted task with id $id" else "error" -> s"Could not delete task with id $id"
       Redirect(routes.Application.index()).flashing(flashMessage)
     }
+  }
+
+  def editPlace(id: Int) = TODO
+
+  def fileNotFound() = Action {implicit request => NotFound(views.html.notFoundPage())}
+
+  def index() = Action.async {implicit request =>
+    taskDAO.getAllTasks.map(tasks => Ok(views.html.main(tasks, TaskDAO.createTaskForm)))
   }
 
 

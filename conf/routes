@@ -8,6 +8,8 @@ POST    /add                        controllers.Application.createTask
 
 GET     /not-found                  controllers.Application.fileNotFound
 
+GET     /edit/:id                   controllers.Application.editPlace(id: Int)
+
 DELETE  /delete/:id                 controllers.Application.deleteTask(id: Int)
 
 
