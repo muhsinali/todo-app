@@ -43,9 +43,10 @@
     <h1>Todo app:</h1>
 
     <div class="pull-left">
-      @form(action = routes.Application.createTask){
+      @form(action = routes.Application.uploadTask){
         <fieldset>
           <legend>Create a task</legend>
+          <input type="hidden" value="@taskForm("id").value.getOrElse("")" name="id"/>
           @inputText(taskForm("title"), '_label -> "Title", 'placeholder -> "Get birthday cake")
           @inputText(taskForm("dueDate"), '_label -> "Due", 'placeholder -> "2017-05-01")
           @textarea(taskForm("description"), '_label -> "Description", 'placeholder -> "Carrot cake with buttercream icing")

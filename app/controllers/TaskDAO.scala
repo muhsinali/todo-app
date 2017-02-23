@@ -10,15 +10,14 @@ import play.api.libs.json.Json
 import play.api.mvc.Controller
 import play.modules.reactivemongo.json._
 import play.modules.reactivemongo.{MongoController, ReactiveMongoApi, ReactiveMongoComponents}
+import reactivemongo.api.commands.{UpdateWriteResult, WriteResult}
 import reactivemongo.api.{Cursor, ReadPreference}
-import reactivemongo.api.commands.WriteResult
 import reactivemongo.play.json.collection.JSONCollection
 
 import scala.concurrent.{ExecutionContext, Future}
 
-/**
-  * Created by Muhsin Ali on 06/02/2017.
-  */
+
+
 class TaskDAO @Inject()(val reactiveMongoApi: ReactiveMongoApi)(implicit ec: ExecutionContext) extends Controller
     with MongoController with ReactiveMongoComponents {
   private val sdf = new SimpleDateFormat("dd-MM-yyyy")
@@ -47,6 +46,16 @@ class TaskDAO @Inject()(val reactiveMongoApi: ReactiveMongoApi)(implicit ec: Exe
   }
 
   def remove(id: Int): Future[WriteResult] = tasksCollection.flatMap(_.remove(Json.obj("id" -> id)))
+
+  def update(taskData: TaskData): Future[UpdateWriteResult] = {
+    val id = taskData.id.get
+    for {
+      tasks <- tasksCollection
+      taskFound <- findById(id)
+      writeResult <- tasks.update(Json.obj("id" -> id),
+        Task(id, taskData.title, taskData.description, taskFound.get.dateCreated, sdf.format(taskData.dueDate)))
+    } yield writeResult
+  }
 
 }
 
