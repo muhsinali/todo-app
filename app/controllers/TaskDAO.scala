@@ -24,6 +24,13 @@ class TaskDAO @Inject()(val reactiveMongoApi: ReactiveMongoApi)(implicit ec: Exe
   private val sdf = new SimpleDateFormat("dd-MM-yyyy")
   private def tasksCollection: Future[JSONCollection] = database.map(_.collection[JSONCollection]("tasks"))
 
+
+  def all: Future[List[Task]] = {
+    tasksCollection.flatMap(_.find(Json.obj()).cursor[Task](ReadPreference.primaryPreferred)
+        .collect[List](Int.MaxValue, Cursor.FailOnError[List[Task]]())
+    )
+  }
+
   def create(t: TaskData): Future[WriteResult] = {
     tasksCollection.flatMap(_.insert(Task(TaskDAO.generateID, t.title, t.description, sdf.format(new Date()), sdf.format(t.dueDate))))
   }
@@ -35,10 +42,8 @@ class TaskDAO @Inject()(val reactiveMongoApi: ReactiveMongoApi)(implicit ec: Exe
 
   def drop(): Future[Boolean] = tasksCollection.flatMap(_.drop(failIfNotFound = true))
 
-  def getAllTasks: Future[List[Task]] = {
-    tasksCollection.flatMap(_.find(Json.obj()).cursor[Task](ReadPreference.primaryPreferred)
-        .collect[List](Int.MaxValue, Cursor.FailOnError[List[Task]]())
-    )
+  def findById(id: Int): Future[Option[Task]] = {
+    tasksCollection.flatMap(_.find(Json.obj("id" -> id)).one[Task](ReadPreference.primaryPreferred))
   }
 
   def remove(id: Int): Future[WriteResult] = tasksCollection.flatMap(_.remove(Json.obj("id" -> id)))

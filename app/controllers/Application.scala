@@ -1,5 +1,6 @@
 package controllers
 
+import java.text.SimpleDateFormat
 import javax.inject.Inject
 
 import models.TaskData
@@ -21,7 +22,7 @@ class Application @Inject()(val reactiveMongoApi: ReactiveMongoApi, val messages
 
   def createTask() = Action.async {implicit request =>
     def failure(formWithErrors: Form[TaskData]) = {
-      taskDAO.getAllTasks.map(tasks => BadRequest(views.html.main(tasks, formWithErrors)))
+      taskDAO.all.map(tasks => BadRequest(views.html.main(tasks, formWithErrors)))
     }
     def success(taskData: TaskData) = {
       taskDAO.create(taskData)
@@ -38,12 +39,19 @@ class Application @Inject()(val reactiveMongoApi: ReactiveMongoApi, val messages
     }
   }
 
-  def editPlace(id: Int) = TODO
+  def editTask(id: Int) = Action.async {implicit request =>
+    taskDAO.findById(id).flatMap {
+      case Some(task) =>
+        val taskData: TaskData = TaskData(Some(task.id), task.title, task.description, new SimpleDateFormat("dd-MM-yyyy").parse(task.dueDate))
+        taskDAO.all.map(tasks => Ok(views.html.main(tasks, TaskDAO.createTaskForm.fill(taskData))));
+      case None => Future(Redirect(routes.Application.index()).flashing("error" -> s"Could not edit task with id $id"))
+    }
+  }
 
   def fileNotFound() = Action {implicit request => NotFound(views.html.notFoundPage())}
 
   def index() = Action.async {implicit request =>
-    taskDAO.getAllTasks.map(tasks => Ok(views.html.main(tasks, TaskDAO.createTaskForm)))
+    taskDAO.all.map(tasks => Ok(views.html.main(tasks, TaskDAO.createTaskForm)))
   }
 
 
