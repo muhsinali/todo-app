@@ -38,7 +38,7 @@ class Application @Inject()(val reactiveMongoApi: ReactiveMongoApi, val messages
     }
   }
 
-  def fileNotFound() = Action {implicit request => NotFound(views.html.notFoundPage())}
+  def fileNotFound() = Action {implicit request => NotFound(views.html.notFound())}
 
   def index() = Action.async {implicit request =>
     taskDAO.all.map(tasks => Ok(views.html.main(tasks, TaskDAO.createTaskForm)))
