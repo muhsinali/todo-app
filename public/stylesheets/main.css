@@ -1,0 +1,26 @@
+body {
+  background-color: #eee;
+}
+
+.pull-right {
+  width: 75%;
+  min-width: 500px;
+}
+
+.task-due-date {
+  min-width: 90px;
+}
+
+.task-title {
+  mid-width: 250px;
+}
+
+h1, legend, label, th {
+    font-family: "Helvetica Neue", "Segoe UI", Segoe, Helvetica, Arial;
+}
+
+h1 {
+  font-size: 72px;
+  font-weight: 300;
+  margin: 0 0 20px 0;
+}

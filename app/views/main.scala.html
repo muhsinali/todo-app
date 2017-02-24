@@ -8,6 +8,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo app</title>
     <link rel="stylesheet" media="screen" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
@@ -68,8 +69,8 @@
         <tbody>
           @for(currentTask <- tasks){
             <tr>
-              <td>@currentTask.dueDate</td>
-              <td>@currentTask.title</td>
+              <td class="task-due-date">@currentTask.dueDate</td>
+              <td class="task-title">@currentTask.title</td>
               <td>@currentTask.description</td>
               <td><a class="glyphicon glyphicon-pencil" href="@routes.Application.editTask(currentTask.id)"></a></td>
               <td><a class="glyphicon glyphicon-trash" onclick="javascript:del('@routes.Application.deleteTask(currentTask.id)')"></a></td>
