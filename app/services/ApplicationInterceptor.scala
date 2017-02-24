@@ -3,7 +3,7 @@ package services
 import java.io.File
 import javax.inject.{Inject, Singleton}
 
-import controllers.TaskDAO
+import dao.TaskDAO
 import models.TaskData
 import play.Environment
 import play.api.Logger

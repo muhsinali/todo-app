@@ -4,9 +4,11 @@
 
 # An example controller showing a sample home page
 GET     /                           controllers.Application.index
-POST    /add                        controllers.Application.createTask
+POST    /add                        controllers.Application.uploadTask
 
 GET     /not-found                  controllers.Application.fileNotFound
+
+GET     /edit/:id                   controllers.Application.editTask(id: Int)
 
 DELETE  /delete/:id                 controllers.Application.deleteTask(id: Int)
 

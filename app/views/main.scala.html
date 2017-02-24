@@ -7,9 +7,13 @@
 
 <html lang="en">
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo app</title>
     <link rel="stylesheet" media="screen" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
+    <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
   </head>
 
   <body class="container">
@@ -40,9 +44,10 @@
     <h1>Todo app:</h1>
 
     <div class="pull-left">
-      @form(action = routes.Application.createTask){
+      @form(action = routes.Application.uploadTask){
         <fieldset>
           <legend>Create a task</legend>
+          <input type="hidden" value="@taskForm("id").value.getOrElse("")" name="id"/>
           @inputText(taskForm("title"), '_label -> "Title", 'placeholder -> "Get birthday cake")
           @inputText(taskForm("dueDate"), '_label -> "Due", 'placeholder -> "2017-05-01")
           @textarea(taskForm("description"), '_label -> "Description", 'placeholder -> "Carrot cake with buttercream icing")
@@ -64,9 +69,10 @@
         <tbody>
           @for(currentTask <- tasks){
             <tr>
-              <td>@currentTask.dueDate</td>
-              <td>@currentTask.title</td>
+              <td class="task-due-date">@currentTask.dueDate</td>
+              <td class="task-title">@currentTask.title</td>
               <td>@currentTask.description</td>
+              <td><a class="glyphicon glyphicon-pencil" href="@routes.Application.editTask(currentTask.id)"></a></td>
               <td><a class="glyphicon glyphicon-trash" onclick="javascript:del('@routes.Application.deleteTask(currentTask.id)')"></a></td>
             </tr>
           }
