@@ -7,6 +7,12 @@ Todo web app [![Build Status](https://travis-ci.org/muhsinali/todo-app.svg?branc
 This is a CRUD web application where the user can create, edit and delete tasks which are displayed back to the user as a list.
 
 
+### Key features:
+- Tasks are programmatically loaded into a MongoDB database at application startup
+- Created a continuous deployment pipeline using Travis and Heroku
+- Used GitFlow
+
+
 ### Tech stack
 - Scala 2.11.8
 - Play framework (version 2.5.12)
