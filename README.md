@@ -4,6 +4,8 @@ Todo web app [![Build Status](https://travis-ci.org/muhsinali/todo-app.svg?branc
 
 ### [Try out project here](http://todo.muhsinali.xyz)
 
+This is a CRUD web application where the user can create, edit and delete tasks which are displayed back to the user as a list.
+
 
 ### Tech stack
 - Scala 2.11.8
