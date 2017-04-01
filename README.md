@@ -4,13 +4,13 @@ Todo web app [![Build Status](https://travis-ci.org/muhsinali/todo-app.svg?branc
 
 ### [Try out project here](http://todo.muhsinali.xyz)
 
-This is a CRUD web application where the user can create, edit and delete tasks which are displayed back to the user as a list.
+This is a CRUD web application where the user can create, edit and delete tasks which are displayed back to the user as a list. It uses the MVC pattern and tasks are stored persistently in a MongoDB database.
 
 
-### Key features:
+### Key features
+- Used the DAO design pattern to provide an interface to the MongoDB database; decouples the persistence layer from the application layer
 - Tasks are programmatically loaded into a MongoDB database at application startup
-- Created a continuous deployment pipeline using Travis and Heroku
-- Used GitFlow
+- Made use of GitFlow and created a continuous deployment pipeline using Travis and Heroku
 
 
 ### Tech stack
