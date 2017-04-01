@@ -1,9 +1,15 @@
 Todo web app [![Build Status](https://travis-ci.org/muhsinali/todo-app.svg?branch=master)](https://travis-ci.org/muhsinali/todo-app) [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 =================================
-
+![alt tag](public/images/connect4.png)
 
 ### [Try out project here](http://todo.muhsinali.xyz)
 
+
+### Tech stack
+- Scala 2.11.8
+- Play framework (version 2.5.12)
+- MongoDB (ReactiveMongo 0.12.1)
+- HTML, CSS, Bootstrap 3, [Twirl template engine](https://www.playframework.com/documentation/2.5.x/ScalaTemplates)
 
 
 Future work
