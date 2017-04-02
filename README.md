@@ -8,9 +8,9 @@ This is a CRUD web application where the user can create, edit and delete tasks 
 
 
 ### Key features
-- Used the DAO design pattern to provide an interface to the MongoDB database; decouples the persistence layer from the application layer
-- Tasks are programmatically loaded into a MongoDB database at application startup
-- Made use of GitFlow and created a continuous deployment pipeline using Travis and Heroku
+- Used the [DAO pattern](https://github.com/muhsinali/todo-app/blob/master/app/dao/TaskDAO.scala) to provide an interface to the MongoDB database; decouples the persistence layer from the application layer
+- Tasks are [programmatically loaded](https://github.com/muhsinali/todo-app/blob/92661a9208c5f3490227725225e7c8ccf345288a/app/services/ApplicationInterceptor.scala#L29-L40) into a MongoDB database at application startup
+- Made use of GitFlow and created a continuous deployment pipeline using [Travis](https://travis-ci.org/muhsinali/todo-app) and Heroku
 
 
 ### Tech stack
