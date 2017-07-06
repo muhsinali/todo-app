@@ -3,6 +3,7 @@ Todo web app [![Build Status](https://travis-ci.org/muhsinali/todo-app.svg?branc
 ![alt tag](public/images/todo.png)
 
 ### [Try out project here](http://todo.muhsinali.xyz)
+#### (Uses free dyno so app takes ~30s to boot up from sleep)
 
 This is a CRUD web application where the user can create, edit and delete tasks which are displayed back to the user as a list. It uses the MVC pattern and tasks are stored persistently in a MongoDB database.
 
